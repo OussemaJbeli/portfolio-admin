@@ -160,6 +160,7 @@ export type Technology = Timestamps & {
   icon_url: string | null
   icon_class: string | null
   color: string | null
+  is_featured: boolean
   pivot?: { project_id: number; technology_id: number; sort_order: number }
 }
 
@@ -380,6 +381,7 @@ export type TechnologyInput = {
   icon_url?: string | null
   icon_class?: string | null
   color?: string | null
+  is_featured?: boolean
 }
 
 export type ProjectCategoryInput = {
