@@ -137,12 +137,15 @@ export type About = Timestamps & {
   photo_url: string | null
   display_name: string | null
   email: string | null
+  birthdate: string | null
   cta_url: string | null
 } & T3<'section_badge'> &
   T3<'heading'> &
   T3N<'bio'> &
+  T3N<'summary'> &
   T3N<'location'> &
   T3<'availability'> &
+  T3N<'open_to'> &
   T3<'cta_label'>
 
 export type AboutBullet = Timestamps & {
@@ -154,6 +157,8 @@ export type AboutBullet = Timestamps & {
 
 /* ── Skills ──────────────────────────────────────────────────────────── */
 
+export type TechnologyProficiency = 'core' | 'proficient' | 'familiar'
+
 export type Technology = Timestamps & {
   id: number
   name: string
@@ -161,8 +166,91 @@ export type Technology = Timestamps & {
   icon_class: string | null
   color: string | null
   is_featured: boolean
+  /** Skill bucket (nullable). */
+  group_id: number | null
+  proficiency: TechnologyProficiency
+  sort_order: number
+  group?: TechnologyGroup | null
   pivot?: { project_id: number; technology_id: number; sort_order: number }
 }
+
+/** Named skill bucket grouping technologies ("Databases", "DevOps & Cloud"…). */
+export type TechnologyGroup = Timestamps & {
+  id: number
+  slug: string
+  icon_class: string | null
+  sort_order: number
+  is_active: boolean
+  technologies?: Technology[]
+} & T3<'name'>
+
+/** A spoken language with proficiency. */
+export type LanguageLevel = 'native' | 'c2' | 'c1' | 'b2' | 'b1' | 'a2' | 'a1'
+
+export type Language = Timestamps & {
+  id: number
+  level: LanguageLevel
+  sort_order: number
+  is_active: boolean
+} & T3<'name'> &
+  T3N<'note'>
+
+/** A personal interest / hobby. */
+export type Interest = Timestamps & {
+  id: number
+  icon_class: string | null
+  sort_order: number
+  is_active: boolean
+} & T3<'name'>
+
+/* ── Journey (git-graph parcours) ────────────────────────────────────────── */
+
+export type JourneyTrackType = 'main' | 'education' | 'work' | 'freelance' | 'self'
+export type EmploymentType = 'full_time' | 'part_time' | 'internship' | 'freelance' | 'contract'
+export type MilestoneKind = 'commit' | 'tag' | 'merge' | 'head'
+
+/** A career branch (education / work / freelance …). */
+export type JourneyTrack = Timestamps & {
+  id: number
+  slug: string
+  branch_name: string
+  type: JourneyTrackType
+  employment_type: EmploymentType | null
+  color: string | null
+  icon_class: string | null
+  started_at: string
+  ended_at: string | null
+  lane_index: number
+  merges_into_id: number | null
+  merged_at: string | null
+  sort_order: number
+  is_active: boolean
+  milestones?: JourneyMilestone[]
+} & T3<'label'> &
+  T3N<'org'> &
+  T3N<'location'>
+
+/** A commit on a branch. `commit_hash` is generated server-side. */
+export type JourneyMilestone = Timestamps & {
+  id: number
+  track_id: number
+  kind: MilestoneKind
+  commit_hash: string
+  tag_label: string | null
+  happened_at: string
+  project_id: number | null
+  link_url: string | null
+  is_highlight: boolean
+  sort_order: number
+  is_active: boolean
+  technologies?: Technology[]
+} & T3<'title'> &
+  T3N<'body'>
+
+export type JourneySection = Timestamps & { id: number } & T3<'section_badge'> &
+  T3<'heading'> &
+  T3N<'subheading'> &
+  T3<'next_label'>
 
 export type SkillCategory = Timestamps & {
   id: number
@@ -182,10 +270,13 @@ export type ProjectCategory = Timestamps & {
   is_active: boolean
 } & T3<'name'>
 
+export type ProjectType = 'freelance' | 'professional' | 'academic' | 'personal'
+
 export type Project = Timestamps & {
   id: number
   slug: string
   category_id: number | null
+  project_type: ProjectType | null
   thumbnail_url: string | null
   is_featured: boolean
   is_active: boolean
@@ -382,7 +473,61 @@ export type TechnologyInput = {
   icon_class?: string | null
   color?: string | null
   is_featured?: boolean
+  group_id?: number | null
+  proficiency?: TechnologyProficiency
+  sort_order?: number
 }
+
+export type TechnologyGroupInput = {
+  slug: string
+  icon_class?: string | null
+  sort_order?: number
+  is_active?: boolean
+} & T3Input<'name'>
+
+export type LanguageInput = {
+  level: LanguageLevel
+  sort_order?: number
+  is_active?: boolean
+} & T3Input<'name'> &
+  T3InputN<'note'>
+
+export type InterestInput = {
+  icon_class?: string | null
+  sort_order?: number
+  is_active?: boolean
+} & T3Input<'name'>
+
+export type JourneyTrackInput = {
+  slug: string
+  branch_name: string
+  type: JourneyTrackType
+  employment_type?: EmploymentType | null
+  color?: string | null
+  icon_class?: string | null
+  started_at: string
+  ended_at?: string | null
+  lane_index?: number
+  merges_into_id?: number | null
+  merged_at?: string | null
+  sort_order?: number
+  is_active?: boolean
+} & T3Input<'label'> &
+  T3InputN<'org'> &
+  T3InputN<'location'>
+
+export type JourneyMilestoneInput = {
+  track_id: number
+  kind: MilestoneKind
+  tag_label?: string | null
+  happened_at: string
+  project_id?: number | null
+  link_url?: string | null
+  is_highlight?: boolean
+  sort_order?: number
+  is_active?: boolean
+} & T3Input<'title'> &
+  T3InputN<'body'>
 
 export type ProjectCategoryInput = {
   slug: string
@@ -393,6 +538,7 @@ export type ProjectCategoryInput = {
 export type ProjectInput = {
   slug: string
   category_id?: number | null
+  project_type?: ProjectType | null
   thumbnail_url?: string | null
   is_featured?: boolean
   is_active?: boolean
@@ -495,6 +641,7 @@ export type ProjectSectionInput = Writable<ProjectSection>
 export type BlogSectionInput = Writable<BlogSection>
 export type ContactSectionInput = Writable<ContactSection>
 export type AuthorInput = Writable<Author>
+export type JourneySectionInput = Writable<JourneySection>
 
 /* ── Landing (one-shot public payload) ───────────────────────────────── */
 
@@ -515,4 +662,7 @@ export interface LandingPayload {
   recent_blogs: Blog[]
   contact_section: ContactSection | null
   author: Author | null
+  technology_groups: TechnologyGroup[]
+  languages: Language[]
+  interests: Interest[]
 }

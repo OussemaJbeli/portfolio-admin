@@ -17,6 +17,9 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', name: 'dashboard', component: () => import('@/views/dashboard/index.vue') },
 
+      // Tools
+      { path: 'cv', name: 'cv', component: () => import('@/views/dashboard/cv/index.vue') },
+
       // Home page
       { path: 'hero', name: 'hero', component: () => import('@/views/dashboard/hero/index.vue') },
       { path: 'about', name: 'about', component: () => import('@/views/dashboard/about/index.vue') },
@@ -35,6 +38,28 @@ const routes: RouteRecordRaw[] = [
         path: 'technologies',
         name: 'technologies',
         component: () => import('@/views/dashboard/technologies/index.vue'),
+      },
+      {
+        path: 'journey',
+        name: 'journey',
+        component: () => import('@/views/dashboard/journey/index.vue'),
+      },
+
+      // Skills & profile
+      {
+        path: 'technology-groups',
+        name: 'technology-groups',
+        component: () => import('@/views/dashboard/technology-groups/index.vue'),
+      },
+      {
+        path: 'languages',
+        name: 'languages',
+        component: () => import('@/views/dashboard/languages/index.vue'),
+      },
+      {
+        path: 'interests',
+        name: 'interests',
+        component: () => import('@/views/dashboard/interests/index.vue'),
       },
 
       // Projects

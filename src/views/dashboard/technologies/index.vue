@@ -4,17 +4,30 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { ApiError } from '@/api/client'
 import Icon from '@/components/Icon.vue'
 import ImageUpload from '@/components/form/ImageUpload.vue'
+import NumberField from '@/components/form/NumberField.vue'
+import SelectField from '@/components/form/SelectField.vue'
 import TextField from '@/components/form/TextField.vue'
 import ToggleField from '@/components/form/ToggleField.vue'
 import AppButton from '@/components/ui/AppButton.vue'
 import AppModal from '@/components/ui/AppModal.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
-import type { Technology, TechnologyInput } from '@/api/types'
-import { useTechnologies } from '@/composables/resources/collections'
+import type { Technology, TechnologyInput, TechnologyProficiency } from '@/api/types'
+import { useTechnologies, useTechnologyGroups } from '@/composables/resources/collections'
 import { assignKnown, toPayload } from '@/lib/forms'
 
 const { items, loading, saving, index, create, update, remove } = useTechnologies()
+const { items: groups, index: indexGroups } = useTechnologyGroups()
+
+const groupOptions = computed(() => groups.value.map((g) => ({ value: g.id, label: g.name_en })))
+const groupName = (id: number | null) =>
+  id === null ? '' : (groups.value.find((g) => g.id === id)?.name_en ?? '')
+
+const PROFICIENCIES: { value: TechnologyProficiency; label: string }[] = [
+  { value: 'core', label: 'Core' },
+  { value: 'proficient', label: 'Proficient' },
+  { value: 'familiar', label: 'Familiar' },
+]
 
 const modalOpen = ref(false)
 const editing = ref<Technology | null>(null)
@@ -27,6 +40,9 @@ function blank() {
     icon_class: '',
     color: '',
     is_featured: false,
+    group_id: null as number | null,
+    proficiency: 'proficient' as TechnologyProficiency,
+    sort_order: 0 as number | null,
   }
 }
 const form = reactive(blank())
@@ -95,7 +111,10 @@ async function confirmDelete() {
   }
 }
 
-onMounted(() => index())
+onMounted(() => {
+  index()
+  indexGroups()
+})
 </script>
 
 <template>
@@ -142,7 +161,9 @@ onMounted(() => index())
         </span>
         <div class="min-w-0 flex-1">
           <p class="truncate font-medium text-primary">{{ item.name }}</p>
-          <p class="truncate font-mono text-[11px] text-secondary">{{ item.color || item.icon_class || '—' }}</p>
+          <p class="truncate font-mono text-[11px] text-secondary">
+            {{ groupName(item.group_id) || 'Ungrouped' }} · {{ item.proficiency }}
+          </p>
         </div>
         <div class="flex shrink-0 gap-1">
           <button
@@ -208,6 +229,17 @@ onMounted(() => index())
           label="Featured on home page"
           hint="Featured technologies appear in the home page tech strip (pick ~5)."
         />
+        <div class="grid gap-5 sm:grid-cols-2">
+          <SelectField
+            v-model="form.group_id"
+            label="Skill group"
+            :options="groupOptions"
+            placeholder="— Ungrouped —"
+            hint="Bucket shown on the skills section."
+          />
+          <SelectField v-model="form.proficiency" label="Proficiency" :options="PROFICIENCIES" />
+        </div>
+        <NumberField v-model="form.sort_order" label="Sort order" :min="0" hint="Order within the group." />
       </form>
       <template #footer>
         <AppButton variant="ghost" @click="modalOpen = false">Cancel</AppButton>

@@ -18,6 +18,10 @@ import type {
   BlogCategory,
   BlogCategoryInput,
   BlogInput,
+  Interest,
+  InterestInput,
+  Language,
+  LanguageInput,
   NavItem,
   NavItemInput,
   Project,
@@ -31,6 +35,8 @@ import type {
   Stat,
   StatInput,
   Technology,
+  TechnologyGroup,
+  TechnologyGroupInput,
   TechnologyInput,
 } from '@/api/types'
 
@@ -56,6 +62,18 @@ export const useSkillCategories = defineCrudResource<SkillCategory, SkillCategor
 
 export const useTechnologies = defineCrudResource<Technology, TechnologyInput>({
   resource: 'technologies',
+})
+
+export const useTechnologyGroups = defineCrudResource<TechnologyGroup, TechnologyGroupInput>({
+  resource: 'technology-groups',
+})
+
+export const useLanguages = defineCrudResource<Language, LanguageInput>({
+  resource: 'languages',
+})
+
+export const useInterests = defineCrudResource<Interest, InterestInput>({
+  resource: 'interests',
 })
 
 export const useProjectCategories = defineCrudResource<ProjectCategory, ProjectCategoryInput>({

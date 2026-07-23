@@ -23,6 +23,10 @@ export const navGroups: NavGroup[] = [
     links: [{ label: 'Dashboard', to: '/', icon: 'dashboard' }],
   },
   {
+    label: 'Tools',
+    links: [{ label: 'CV Generator', to: '/cv', icon: 'cv' }],
+  },
+  {
     label: 'Home Page',
     links: [
       { label: 'Hero', to: '/hero', icon: 'hero' },
@@ -31,6 +35,15 @@ export const navGroups: NavGroup[] = [
       { label: 'Stats', to: '/stats', icon: 'stats' },
       { label: 'Skills', to: '/skills', icon: 'skills' },
       { label: 'Technologies', to: '/technologies', icon: 'technologies' },
+      { label: 'Journey', to: '/journey', icon: 'journey' },
+    ],
+  },
+  {
+    label: 'Skills & Profile',
+    links: [
+      { label: 'Skill Groups', to: '/technology-groups', icon: 'layers' },
+      { label: 'Languages', to: '/languages', icon: 'language' },
+      { label: 'Interests', to: '/interests', icon: 'heart' },
     ],
   },
   {

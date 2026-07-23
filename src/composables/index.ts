@@ -38,6 +38,9 @@ export {
   useAboutBullets,
   useSkillCategories,
   useTechnologies,
+  useTechnologyGroups,
+  useLanguages,
+  useInterests,
   useProjectCategories,
   useProjects,
   useBlogCategories,
@@ -71,6 +74,14 @@ export {
   useBlogRelated,
   useBlogCategoriesMap,
 } from '@/composables/resources/blogChildren'
+
+// Journey (git-graph parcours)
+export {
+  useJourneyTracks,
+  useJourneyMilestones,
+  useJourneySection,
+  syncMilestoneTechnologies,
+} from '@/composables/resources/journey'
 
 // Contact inbox (admin)
 export { useContactMessages } from '@/composables/resources/contactMessages'

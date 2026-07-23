@@ -52,6 +52,23 @@ export const icons = {
   alert:
     '<path d="M12 3l9 16H3z"/><line x1="12" y1="10" x2="12" y2="14"/><circle cx="12" cy="16.7" r="0.6" fill="currentColor"/>',
   save: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4"/><rect x="8" y="13" width="8" height="5"/>',
+  cv: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="11" r="2"/><path d="M5.4 16a3 3 0 0 1 5.2 0"/><line x1="14" y1="9.5" x2="18" y2="9.5"/><line x1="14" y1="13" x2="18" y2="13"/>',
+  download:
+    '<path d="M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/><path d="M12 4v11"/><path d="M8 11l4 4 4-4"/>',
+  printer:
+    '<path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M8 17h8v4H8z"/>',
+  palette:
+    '<path d="M12 3a9 9 0 0 0 0 18c1 0 1.6-.8 1.6-1.7 0-.9-.7-1.4-.7-2.1 0-.7.6-1.2 1.3-1.2H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16.5" cy="10.5" r="1"/>',
+  globe:
+    '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"/>',
+  language:
+    '<path d="M4 5h9"/><path d="M8 3v2c0 5-2 8-5 10"/><path d="M6 10c0 3 3 5 7 6"/><path d="M13 20l4-9 4 9"/><path d="M14.5 17h5"/>',
+  heart:
+    '<path d="M12 21s-6.5-4.35-9-8.5C1 9 2.5 5.5 6 5.5c2 0 3.2 1.2 4 2.5.8-1.3 2-2.5 4-2.5 3.5 0 5 3.5 3 7-2.5 4.15-9 8.5-9 8.5z"/>',
+  layers:
+    '<polygon points="12 3 21 8 12 13 3 8 12 3"/><path d="M3 12l9 5 9-5"/><path d="M3 16l9 5 9-5"/>',
+  journey:
+    '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
 } as const
 
 export type IconName = keyof typeof icons

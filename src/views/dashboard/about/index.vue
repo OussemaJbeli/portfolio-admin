@@ -22,6 +22,7 @@ function blank() {
     photo_url: null as string | null,
     display_name: '',
     email: '',
+    birthdate: '',
     cta_url: '',
     section_badge_en: '',
     section_badge_fr: '',
@@ -32,12 +33,18 @@ function blank() {
     bio_en: '',
     bio_fr: '',
     bio_ar: '',
+    summary_en: '',
+    summary_fr: '',
+    summary_ar: '',
     location_en: '',
     location_fr: '',
     location_ar: '',
     availability_en: '',
     availability_fr: '',
     availability_ar: '',
+    open_to_en: '',
+    open_to_fr: '',
+    open_to_ar: '',
     cta_label_en: '',
     cta_label_fr: '',
     cta_label_ar: '',
@@ -81,7 +88,8 @@ async function onSubmit() {
             <LangField :form="form" base="section_badge" label="Section badge" placeholder="> ABOUT ME" />
             <LangField :form="form" base="heading" label="Heading" placeholder="About Me" />
           </div>
-          <LangField :form="form" base="bio" label="Bio" type="textarea" :rows="6" />
+          <LangField :form="form" base="bio" label="Bio" type="textarea" :rows="5" hint="Short bio shown in the About section." />
+          <LangField :form="form" base="summary" label="Summary (CV / long)" type="textarea" :rows="6" hint="Longer summary used by the CV generator." />
           <ImageUpload v-model="form.photo_url" folder="about" label="Photo" />
         </div>
       </div>
@@ -97,8 +105,12 @@ async function onSubmit() {
             <TextField v-model="form.email" type="email" label="Email" placeholder="you@example.com" />
           </div>
           <div class="grid gap-5 sm:grid-cols-2">
+            <TextField v-model="form.birthdate" type="date" label="Birthdate" hint="Used to show your age." />
             <LangField :form="form" base="location" label="Location" />
+          </div>
+          <div class="grid gap-5 sm:grid-cols-2">
             <LangField :form="form" base="availability" label="Availability" placeholder="Freelance / Full-time" />
+            <LangField :form="form" base="open_to" label="Open to" placeholder="DevOps · Full-Stack · Cloud · freelance" />
           </div>
           <div class="grid gap-5 sm:grid-cols-2">
             <LangField :form="form" base="cta_label" label="CTA label" placeholder="Let's Talk" />

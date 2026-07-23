@@ -13,7 +13,7 @@ import AppButton from '@/components/ui/AppButton.vue'
 import AppModal from '@/components/ui/AppModal.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
-import type { Project, ProjectInput } from '@/api/types'
+import type { Project, ProjectInput, ProjectType } from '@/api/types'
 import { useProjectCategories, useProjects } from '@/composables/resources/collections'
 import { provideFormLocale } from '@/composables/useFormLocale'
 import { assignKnown, slugify, toPayload } from '@/lib/forms'
@@ -26,6 +26,13 @@ const { items: categories, index: indexCategories } = useProjectCategories()
 const categoryOptions = computed(() =>
   categories.value.map((c) => ({ value: c.id, label: c.name_en })),
 )
+
+const PROJECT_TYPES: { value: ProjectType; label: string }[] = [
+  { value: 'freelance', label: 'Freelance' },
+  { value: 'professional', label: 'Professional' },
+  { value: 'academic', label: 'Academic' },
+  { value: 'personal', label: 'Personal' },
+]
 const filterOptions = computed(() => categories.value.map((c) => ({ value: c.slug, label: c.name_en })))
 
 /* ── Filters + pagination ───────────────────────────────────────────── */
@@ -67,6 +74,7 @@ function blank() {
   return {
     slug: '',
     category_id: null as number | null,
+    project_type: null as ProjectType | null,
     thumbnail_url: null as string | null,
     hero_image_url: null as string | null,
     is_featured: false,
@@ -263,9 +271,10 @@ onMounted(async () => {
         <!-- Basics -->
         <div class="space-y-5">
           <h4 class="font-mono text-[11px] tracking-widest text-accent">&gt;_ BASICS</h4>
-          <div class="grid gap-5 sm:grid-cols-2">
+          <div class="grid gap-5 sm:grid-cols-3">
             <TextField :model-value="form.slug" label="Slug" required placeholder="my-project" hint="lowercase, dashes" :error="formError?.first('slug')" @update:model-value="onSlugInput" />
             <SelectField v-model="form.category_id" label="Category" placeholder="No category" :options="categoryOptions" :error="formError?.first('category_id')" />
+            <SelectField v-model="form.project_type" label="Type" placeholder="— None —" :options="PROJECT_TYPES" :error="formError?.first('project_type')" />
           </div>
           <div class="grid gap-5 sm:grid-cols-3">
             <NumberField v-model="form.sort_order" label="Sort order" :min="0" />
