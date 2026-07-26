@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import { ApiError, uploadImage } from '@/api/client'
 import Icon from '@/components/Icon.vue'
+import { assetUrl } from '@/composables/useBaseUrl'
 
 const props = defineProps<{
   modelValue: string | null | undefined
@@ -52,7 +53,7 @@ function remove() {
       <div
         class="grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-xl border border-line bg-card"
       >
-        <img v-if="modelValue" :src="modelValue" alt="" class="h-full w-full object-cover" />
+        <img v-if="modelValue" :src="assetUrl(modelValue)" alt="" class="h-full w-full object-cover" />
         <Icon v-else name="image" class="h-7 w-7 text-secondary/40" />
       </div>
 

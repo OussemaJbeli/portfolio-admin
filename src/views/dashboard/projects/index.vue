@@ -5,6 +5,7 @@ import { ApiError } from '@/api/client'
 import Icon from '@/components/Icon.vue'
 import ImageUpload from '@/components/form/ImageUpload.vue'
 import LangField from '@/components/form/LangField.vue'
+import ProjectGalleryEditor from '@/components/form/ProjectGalleryEditor.vue'
 import NumberField from '@/components/form/NumberField.vue'
 import SelectField from '@/components/form/SelectField.vue'
 import TextField from '@/components/form/TextField.vue'
@@ -70,6 +71,10 @@ const editing = ref<Project | null>(null)
 const formError = ref<ApiError | null>(null)
 const slugTouched = ref(false)
 
+/** Gallery editor lives inside the modal; flushed to the API after the project saves. */
+const galleryEditor = ref<{ flush: (slug: string) => Promise<void> } | null>(null)
+const galleryRevision = ref(0)
+
 function blank() {
   return {
     slug: '',
@@ -122,6 +127,7 @@ function openCreate() {
   Object.assign(form, blank())
   slugTouched.value = false
   formError.value = null
+  galleryRevision.value++
   modalOpen.value = true
 }
 
@@ -132,6 +138,7 @@ function openEdit(item: Project) {
   form.completed_date = (item.completed_date ?? '').slice(0, 10)
   slugTouched.value = true
   formError.value = null
+  galleryRevision.value++
   modalOpen.value = true
 }
 
@@ -141,6 +148,8 @@ async function submit() {
     const payload = toPayload(form) as ProjectInput
     if (editing.value) await update(editing.value.slug, payload)
     else await create(payload)
+    // Persist gallery (new uploads, edits, removals, reordering) against the saved slug.
+    await galleryEditor.value?.flush(form.slug)
     modalOpen.value = false
     await load()
   } catch (e) {
@@ -302,6 +311,16 @@ onMounted(async () => {
           <h4 class="font-mono text-[11px] tracking-widest text-accent">&gt;_ MEDIA</h4>
           <ImageUpload v-model="form.thumbnail_url" folder="projects" label="Thumbnail" />
           <ImageUpload v-model="form.hero_image_url" folder="projects" label="Hero image" />
+        </div>
+
+        <!-- Gallery -->
+        <div class="space-y-5 border-t border-line pt-5">
+          <h4 class="font-mono text-[11px] tracking-widest text-accent">&gt;_ GALLERY</h4>
+          <ProjectGalleryEditor
+            ref="galleryEditor"
+            :project-slug="editing?.slug ?? null"
+            :revision="galleryRevision"
+          />
         </div>
 
         <!-- Meta -->

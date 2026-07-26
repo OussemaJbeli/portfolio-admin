@@ -14,6 +14,12 @@ const RAW_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api
 /** Base URL without a trailing slash, e.g. `http://localhost:8000/api`. */
 export const API_BASE_URL = RAW_BASE.replace(/\/+$/, '')
 
+/**
+ * Backend origin without the `/api` suffix, e.g. `http://localhost:8000`.
+ * Prefix stored "/assets/..." image paths with this when rendering an <img>.
+ */
+export const BACKEND_URL = new URL(API_BASE_URL, window.location.origin).origin
+
 const TOKEN_STORAGE_KEY = 'admin_token'
 
 let authToken: string | null = readStoredToken()
